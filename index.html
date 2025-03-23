@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>普通页面</title>  <!-- 标题不透露内容 -->
+    <style>
+        /* 设置背景 */
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* 禁止滚动 */
+            background-color: lightgray;  /* 背景色 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            overflow-x: hidden; /* 禁止横向滑动 */
+        }
+
+        /* 中央容器 */
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 按钮样式 */
+        #startButton {
+            padding: 30px 60px;
+            font-size: 30px;
+            background-color: yellow;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        #startButton:hover {
+            background-color: orange;
+        }
+
+        /* 字形积木样式 */
+        .word {
+            position: absolute;
+            font-size: 20px;
+            font-weight: bold;
+            user-select: none;
+            white-space: nowrap;
+            transition: transform 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #f7f7f7;
+            border: 3px solid #333;
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .word span {
+            color: #333;
+            display: block;
+            font-size: inherit;
+        }
+
+        /* 水滴效果样式 */
+        .drop {
+            position: absolute;
+            font-size: 30px;
+            opacity: 0.7;
+            animation: dropFall 2s infinite linear, dropSway 2s ease-in-out infinite;
+        }
+
+        /* 水滴下落动画 */
+        @keyframes dropFall {
+            0% {
+                top: -50px;
+                opacity: 0.7;
+            }
+            100% {
+                top: 100vh;
+                opacity: 0;
+            }
+        }
+
+        /* 水滴轻微摇摆动画 */
+        @keyframes dropSway {
+            0% {
+                transform: translateX(0);
+            }
+            50% {
+                transform: translateX(15px);
+            }
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1 id="rainMessage" style="display: none;">下雨咯！</h1>  <!-- 隐藏提示 -->
+        <button id="startButton">点我试试</button>
+    </div>
+
+    <script>
+        const startButton = document.getElementById("startButton");
+        const rainMessage = document.getElementById("rainMessage");
+        let isRaining = false;
+        let clickCount = 0;
+        let wordStack = {}; // 记录每个位置的堆积高度
+        let gravity = 0.5;  // 初始下落重力
+        let speedIncreaseRate = 0.1;  // 每次点击加速速度
+
+        // 创建水滴
+        function createDrop() {
+            const dropElement = document.createElement("div");
+            dropElement.classList.add("drop");
+            dropElement.innerText = "💧"; // 使用水滴表情符号
+
+            // 随机生成 x 位置
+            const startX = Math.random() * window.innerWidth;
+            dropElement.style.left = startX + "px";
+
+            document.body.appendChild(dropElement);
+        }
+
+        // 创建文字雨
+        function createWordRain() {
+            if (!isRaining) return;
+
+            const wordElement = document.createElement("div");
+            wordElement.classList.add("word");
+            const randomWord = "如何呢";  // 只显示 "如何呢"
+            const span = document.createElement("span");
+            span.innerText = randomWord;
+            wordElement.appendChild(span);
+
+            // 随机生成 x 位置
+            const startX = Math.random() * window.innerWidth * 0.9;
+            const fontSize = Math.random() * 30 + 20;  // 字体大小调整
+            wordElement.style.fontSize = fontSize + "px";
+            wordElement.style.left = startX + "px";
+            wordElement.style.top = "-50px"; // 从顶部掉落
+            wordElement.style.color = `hsl(${Math.random() * 360}, 100%, 70%)`; // 随机颜色
+            wordElement.style.transform = `rotate(${Math.random() * 30 - 15}deg)`; // 轻微旋转
+
+            document.body.appendChild(wordElement);
+
+            // 让文字掉落
+            let speed = Math.random() * 2 + 1;
+            let positionY = 0;
+
+            function fall() {
+                positionY += speed;
+                speed += gravity; // 模拟加速度
+                wordElement.style.top = positionY + "px";
+
+                // 到达底部，开始堆积
+                if (positionY + fontSize >= window.innerHeight - 10) {
+                    let roundedX = Math.round(startX / 40) * 40; // 归一化 X 位置，使堆积对齐
+                    let stackHeight = wordStack[roundedX] || 0;
+                    wordStack[roundedX] = stackHeight + fontSize;
+
+                    wordElement.style.top = (window.innerHeight - 10 - stackHeight - fontSize) + "px";
+                    return;
+                }
+
+                requestAnimationFrame(fall);
+            }
+
+            fall();
+        }
+
+        startButton.addEventListener("click", () => {
+            clickCount++;
+
+            // 初次点击显示提示信息
+            if (clickCount === 1) {
+                rainMessage.style.display = "block"; // 显示提示
+                setTimeout(() => {
+                    rainMessage.style.display = "none"; // 两秒后隐藏提示
+                }, 2000);
+            }
+
+            // 每次点击加速
+            gravity += speedIncreaseRate;
+
+            if (isRaining) return;
+
+            isRaining = true;
+            startButton.style.display = "none"; // 隐藏按钮
+
+            setInterval(createWordRain, 200 - clickCount * 10); // 每次点击加快生成速度
+            setInterval(createDrop, 200); // 每隔200毫秒生成一个水滴
+        });
+    </script>
+
+</body>
+</html>
