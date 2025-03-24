@@ -3,205 +3,602 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>普通页面</title>  <!-- 标题不透露内容 -->
+    <title>命运预示仪</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
-        /* 设置背景 */
-        body {
+        :root {
+            --primary: #00f0ff; /* 霓虹蓝 */
+            --primary-glow: #00f0ff88; /* 霓虹蓝光晕 */
+            --secondary: #bf00ff; /* 神秘紫 */
+            --secondary-glow: #bf00ff88; /* 神秘紫光晕 */
+            --yes-color: #36ff9e; /* 神秘绿 */
+            --no-color: #ff3670; /* 神秘红 */
+            --unknown-color: #ffe336; /* 神秘黄 */
+            --background: #080b16; /* 深空背景 */
+            --card-bg: rgba(16, 23, 41, 0.8); /* 半透明深色背景 */
+            --text-primary: #ffffff; /* 明亮文字 */
+            --text-secondary: #a4b5d5; /* 淡蓝文字 */
+            --card-radius: 12px; /* 卡片圆角 */
+            --button-radius: 24px; /* 按钮圆角 */
+            --card-shadow: 0 8px 24px rgba(0, 240, 255, 0.2); /* 蓝色光晕阴影 */
+            --card-height: 180px;
+            --glow-animation-duration: 3s;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 5px var(--primary-glow); }
+            50% { box-shadow: 0 0 20px var(--primary-glow), 0 0 30px var(--primary-glow); }
+            100% { box-shadow: 0 0 5px var(--primary-glow); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes starfield {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 1000px; }
+        }
+
+        @keyframes glow {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+
+        * {
             margin: 0;
             padding: 0;
-            overflow: hidden; /* 禁止滚动 */
-            background-color: lightgray;  /* 背景色 */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            overflow-x: hidden; /* 禁止横向滑动 */
+            box-sizing: border-box;
+            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        /* 中央容器 */
-        .container {
+        *:focus {
+            outline: none;
+        }
+
+        body {
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            min-height: 100vh;
+            background-color: var(--background);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0,240,255,0.05) 0%, transparent 30%),
+                radial-gradient(circle at 90% 80%, rgba(191,0,255,0.05) 0%, transparent 30%),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 800 800'%3E%3Cg fill='none' stroke='%23102040' stroke-width='1'%3E%3Cpath d='M769 229L1037 260.9M927 880L731 737 520 660 309 538 40 599 295 764 126.5 879.5 40 599-197 493 102 382-31 229 126.5 79.5-69-63'/%3E%3Cpath d='M-31 229L237 261 390 382 603 493 308.5 537.5 101.5 381.5M370 905L295 764'/%3E%3Cpath d='M520 660L578 842 731 737 840 599 603 493 520 660 295 764 309 538 390 382 539 269 769 229 577.5 41.5 370 105 295 -36 126.5 79.5 237 261 102 382 40 599 -69 737 127 880'/%3E%3Cpath d='M520-140L578.5 42.5 731-63M603 493L539 269 237 261 370 105M902 382L539 269M390 382L102 382'/%3E%3Cpath d='M-222 42L126.5 79.5 370 105 539 269 577.5 41.5 927 80 769 229 902 382 603 493 731 737M295-36L577.5 41.5M578 842L295 764M40-201L127 80M102 382L-261 269'/%3E%3C/g%3E%3Cg fill='%23102040'%3E%3Ccircle cx='769' cy='229' r='5'/%3E%3Ccircle cx='539' cy='269' r='5'/%3E%3Ccircle cx='603' cy='493' r='5'/%3E%3Ccircle cx='731' cy='737' r='5'/%3E%3Ccircle cx='520' cy='660' r='5'/%3E%3Ccircle cx='309' cy='538' r='5'/%3E%3Ccircle cx='295' cy='764' r='5'/%3E%3Ccircle cx='40' cy='599' r='5'/%3E%3Ccircle cx='102' cy='382' r='5'/%3E%3Ccircle cx='127' cy='80' r='5'/%3E%3Ccircle cx='370' cy='105' r='5'/%3E%3Ccircle cx='578' cy='42' r='5'/%3E%3Ccircle cx='237' cy='261' r='5'/%3E%3Ccircle cx='390' cy='382' r='5'/%3E%3C/g%3E%3C/svg%3E");
+            color: var(--text-primary);
+            padding: 0;
+            overflow-x: hidden;
+            line-height: 1.5;
+            font-weight: 300;
+            position: relative;
         }
 
-        /* 按钮样式 */
-        #startButton {
-            padding: 30px 60px;
-            font-size: 30px;
-            background-color: yellow;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-            border-radius: 10px;
-            margin-top: 20px;
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='6' height='6' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='3' cy='3' r='1' fill='%23ffffff' fill-opacity='0.2'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+            pointer-events: none;
+            animation: starfield 120s linear infinite;
+            z-index: -1;
         }
 
-        #startButton:hover {
-            background-color: orange;
+        .app-header {
+            padding: 24px 16px;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(16, 23, 41, 0.9), rgba(36, 43, 81, 0.9));
+            color: white;
+            position: relative;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+            box-shadow: 0 5px 20px rgba(0, 240, 255, 0.2);
+            overflow: hidden;
         }
 
-        /* 字形积木样式 */
-        .word {
+        .app-header::before, .app-header::after {
+            content: "";
             position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: var(--primary);
+            filter: blur(80px);
+            opacity: 0.2;
+            z-index: 0;
+        }
+
+        .app-header::before {
+            top: -100px;
+            left: -100px;
+            background: var(--primary);
+        }
+
+        .app-header::after {
+            bottom: -100px;
+            right: -100px;
+            background: var(--secondary);
+        }
+
+        .header-glow {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 30px;
+            background: var(--primary);
+            filter: blur(20px);
+            opacity: 0.3;
+            animation: glow var(--glow-animation-duration) ease-in-out infinite;
+        }
+
+        .main-title {
+            font-size: 28px;
+            font-weight: 500;
+            margin: 0;
+            letter-spacing: 4px;
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+        }
+
+        .app-content {
+            flex: 1;
+            width: 100%;
+            max-width: 540px;
+            margin: 0 auto;
+            padding: 24px 16px 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .instruction-card {
+            background-color: var(--card-bg);
+            border-radius: var(--card-radius);
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .instruction-card::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: linear-gradient(135deg, var(--primary-glow), var(--secondary-glow));
+            z-index: -1;
+            filter: blur(20px);
+            opacity: 0.1;
+        }
+
+        .instruction-title {
             font-size: 20px;
-            font-weight: bold;
-            user-select: none;
-            white-space: nowrap;
-            transition: transform 0.2s;
+            font-weight: 500;
+            color: var(--primary);
+            margin-bottom: 16px;
             display: flex;
+            align-items: center;
+            text-shadow: 0 0 5px var(--primary-glow);
+        }
+
+        .instruction-title::before {
+            content: "✧";
+            margin-right: 8px;
+            color: var(--primary);
+        }
+
+        .instruction-content {
+            color: var(--text-secondary);
+            font-size: 15px;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+
+        .instruction-step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            position: relative;
+        }
+
+        .step-number {
+            display: inline-flex;
             justify-content: center;
             align-items: center;
-            padding: 10px 20px;
-            background-color: #f7f7f7;
-            border: 3px solid #333;
-            border-radius: 5px;
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+            width: 24px;
+            height: 24px;
+            color: var(--background);
+            font-weight: 500;
+            margin-right: 12px;
+            flex-shrink: 0;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            font-size: 12px;
         }
 
-        .word span {
-            color: #333;
-            display: block;
-            font-size: inherit;
+        .step-text {
+            padding-top: 2px;
         }
 
-        /* 水滴效果样式 */
-        .drop {
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+            perspective: 1000px;
+        }
+
+        .card-wrapper {
+            perspective: 1000px;
+        }
+
+        .card {
+            position: relative;
+            width: 100%;
+            height: var(--card-height);
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: var(--card-radius);
+            box-shadow: var(--card-shadow);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .card:hover {
+            animation: pulse 2s infinite;
+        }
+
+        .card-face {
             position: absolute;
-            font-size: 30px;
-            opacity: 0.7;
-            animation: dropFall 2s infinite linear, dropSway 2s ease-in-out infinite;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: var(--card-radius);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(0, 240, 255, 0.3);
         }
 
-        /* 水滴下落动画 */
-        @keyframes dropFall {
-            0% {
-                top: -50px;
-                opacity: 0.7;
-            }
-            100% {
-                top: 100vh;
-                opacity: 0;
-            }
+        .card-front {
+            background-color: var(--card-bg);
+            color: var(--text-primary);
+            font-size: 42px;
+            font-weight: 300;
+            background-image: 
+                radial-gradient(circle at center, rgba(0,240,255,0.1) 0%, transparent 70%),
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%230373bd' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
         }
 
-        /* 水滴轻微摇摆动画 */
-        @keyframes dropSway {
-            0% {
-                transform: translateX(0);
-            }
-            50% {
-                transform: translateX(15px);
-            }
-            100% {
-                transform: translateX(0);
-            }
+        .card-front::before {
+            content: "?";
+            position: relative;
+            z-index: 2;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
         }
 
+        .card-front::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 30% 30%, rgba(0, 240, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 70%, rgba(191, 0, 255, 0.1) 0%, transparent 50%);
+            z-index: 1;
+            opacity: 0.8;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            color: white;
+            font-size: 28px;
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card-back::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 70% 70%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+            z-index: 1;
+        }
+
+        .card-back-content {
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-back::after {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                -45deg,
+                rgba(255, 255, 255, 0.1),
+                rgba(255, 255, 255, 0.1) 10px,
+                rgba(255, 255, 255, 0.05) 10px,
+                rgba(255, 255, 255, 0.05) 20px
+            );
+            opacity: 0.3;
+            animation: float 10s linear infinite;
+        }
+
+        .card.is-yes .card-back {
+            background: linear-gradient(135deg, var(--yes-color), rgba(0, 200, 100, 0.8));
+        }
+
+        .card.is-no .card-back {
+            background: linear-gradient(135deg, var(--no-color), rgba(200, 0, 100, 0.8));
+        }
+
+        .card.is-unknown .card-back {
+            background: linear-gradient(135deg, var(--unknown-color), rgba(200, 150, 0, 0.8));
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .action-button {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: var(--button-radius);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 5px 15px rgba(0, 240, 255, 0.3);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 1px;
+        }
+
+        .action-button::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            transition: 0.5s;
+        }
+
+        .action-button:hover::before {
+            left: 100%;
+        }
+
+        .action-button:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 10px rgba(0, 240, 255, 0.2);
+        }
+
+        .cosmic-particles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @media (max-width: 480px) {
+            .app-header {
+                padding: 16px;
+            }
+
+            .main-title {
+                font-size: 24px;
+            }
+
+            .card-container {
+                gap: 12px;
+            }
+
+            :root {
+                --card-height: 160px;
+            }
+
+            .card-front {
+                font-size: 36px;
+            }
+
+            .card-back {
+                font-size: 22px;
+            }
+
+            .instruction-card {
+                padding: 16px;
+            }
+
+            .instruction-title {
+                font-size: 18px;
+            }
+
+            .instruction-content {
+                font-size: 14px;
+            }
+
+            .action-button {
+                padding: 14px;
+                font-size: 15px;
+            }
+        }
     </style>
 </head>
 <body>
+    <div class="cosmic-particles"></div>
+    
+    <header class="app-header">
+        <div class="header-glow"></div>
+        <h1 class="main-title">命运预示仪</h1>
+    </header>
 
-    <div class="container">
-        <h1 id="rainMessage" style="display: none;">下雨咯！</h1>  <!-- 隐藏提示 -->
-        <button id="startButton">点我试试</button>
-    </div>
+    <main class="app-content">
+        <div class="instruction-card">
+            <h2 class="instruction-title">跨维使用指南</h2>
+            <div class="instruction-content">
+                <div class="instruction-step">
+                    <div class="step-number">1</div>
+                    <div class="step-text">闭眼冥想，感受宇宙能量流转</div>
+                </div>
+                <div class="instruction-step">
+                    <div class="step-number">2</div>
+                    <div class="step-text">凭直觉选择蕴含命运密码的能量卡</div>
+                </div>
+                <div class="instruction-step">
+                    <div class="step-number">3</div>
+                    <div class="step-text">解读量子维度传递的命运讯息</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-container">
+            <div class="card-wrapper">
+                <div class="card" onclick="flipCard(this)">
+                    <div class="card-face card-front"></div>
+                    <div class="card-face card-back">
+                        <div class="card-back-content">答案</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card" onclick="flipCard(this)">
+                    <div class="card-face card-front"></div>
+                    <div class="card-face card-back">
+                        <div class="card-back-content">答案</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card" onclick="flipCard(this)">
+                    <div class="card-face card-front"></div>
+                    <div class="card-face card-back">
+                        <div class="card-back-content">答案</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button class="action-button" onclick="resetAllCards()">重置命运之门</button>
+    </main>
 
     <script>
-        const startButton = document.getElementById("startButton");
-        const rainMessage = document.getElementById("rainMessage");
-        let isRaining = false;
-        let clickCount = 0;
-        let wordStack = {}; // 记录每个位置的堆积高度
-        let gravity = 0.5;  // 初始下落重力
-        let speedIncreaseRate = 0.1;  // 每次点击加速速度
+        // 创建宇宙粒子效果
+        function createCosmicParticles() {
+            const container = document.querySelector('.cosmic-particles');
+            const particleCount = 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                const size = Math.random() * 2 + 1;
+                
+                particle.style.position = 'absolute';
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.background = i % 2 === 0 ? 'rgba(0, 240, 255, 0.8)' : 'rgba(191, 0, 255, 0.8)';
+                particle.style.borderRadius = '50%';
+                particle.style.top = `${Math.random() * 100}%`;
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.filter = `blur(${Math.random()}px)`;
+                particle.style.opacity = Math.random() * 0.5 + 0.1;
+                
+                // 添加闪烁动画
+                const animDuration = Math.random() * 3 + 2;
+                particle.style.animation = `glow ${animDuration}s ease-in-out infinite`;
+                
+                container.appendChild(particle);
+            }
+        }
+        
+        // 初始化宇宙粒子
+        createCosmicParticles();
 
-        // 创建水滴
-        function createDrop() {
-            const dropElement = document.createElement("div");
-            dropElement.classList.add("drop");
-            dropElement.innerText = "💧"; // 使用水滴表情符号
+        const results = [
+            { value: "是", cardClass: "is-yes" },
+            { value: "否", cardClass: "is-no" },
+            { value: "未知", cardClass: "is-unknown" }
+        ];
 
-            // 随机生成 x 位置
-            const startX = Math.random() * window.innerWidth;
-            dropElement.style.left = startX + "px";
-
-            document.body.appendChild(dropElement);
+        function flipCard(card) {
+            if (card.classList.contains('flipped')) return;
+            
+            // 随机结果
+            const resultIndex = Math.floor(Math.random() * results.length);
+            const result = results[resultIndex];
+            
+            // 更新卡片内容和样式
+            card.classList.add(result.cardClass, 'flipped');
+            card.querySelector('.card-back-content').textContent = result.value;
+            
+            // 添加翻牌音效
+            playFlipSound();
         }
 
-        // 创建文字雨
-        function createWordRain() {
-            if (!isRaining) return;
-
-            const wordElement = document.createElement("div");
-            wordElement.classList.add("word");
-            const randomWord = "如何呢";  // 只显示 "如何呢"
-            const span = document.createElement("span");
-            span.innerText = randomWord;
-            wordElement.appendChild(span);
-
-            // 随机生成 x 位置
-            const startX = Math.random() * window.innerWidth * 0.9;
-            const fontSize = Math.random() * 30 + 20;  // 字体大小调整
-            wordElement.style.fontSize = fontSize + "px";
-            wordElement.style.left = startX + "px";
-            wordElement.style.top = "-50px"; // 从顶部掉落
-            wordElement.style.color = `hsl(${Math.random() * 360}, 100%, 70%)`; // 随机颜色
-            wordElement.style.transform = `rotate(${Math.random() * 30 - 15}deg)`; // 轻微旋转
-
-            document.body.appendChild(wordElement);
-
-            // 让文字掉落
-            let speed = Math.random() * 2 + 1;
-            let positionY = 0;
-
-            function fall() {
-                positionY += speed;
-                speed += gravity; // 模拟加速度
-                wordElement.style.top = positionY + "px";
-
-                // 到达底部，开始堆积
-                if (positionY + fontSize >= window.innerHeight - 10) {
-                    let roundedX = Math.round(startX / 40) * 40; // 归一化 X 位置，使堆积对齐
-                    let stackHeight = wordStack[roundedX] || 0;
-                    wordStack[roundedX] = stackHeight + fontSize;
-
-                    wordElement.style.top = (window.innerHeight - 10 - stackHeight - fontSize) + "px";
-                    return;
-                }
-
-                requestAnimationFrame(fall);
-            }
-
-            fall();
+        function resetAllCards() {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.classList.remove('flipped', 'is-yes', 'is-no', 'is-unknown');
+            });
+            
+            // 添加重置音效
+            playResetSound();
         }
-
-        startButton.addEventListener("click", () => {
-            clickCount++;
-
-            // 初次点击显示提示信息
-            if (clickCount === 1) {
-                rainMessage.style.display = "block"; // 显示提示
-                setTimeout(() => {
-                    rainMessage.style.display = "none"; // 两秒后隐藏提示
-                }, 2000);
-            }
-
-            // 每次点击加速
-            gravity += speedIncreaseRate;
-
-            if (isRaining) return;
-
-            isRaining = true;
-            startButton.style.display = "none"; // 隐藏按钮
-
-            setInterval(createWordRain, 200 - clickCount * 10); // 每次点击加快生成速度
-            setInterval(createDrop, 200); // 每隔200毫秒生成一个水滴
-        });
+        
+        // 模拟音效函数（真实项目中可以使用实际的音频文件）
+        function playFlipSound() {
+            // 在这里添加实际的音效播放代码
+            console.log("播放翻牌音效");
+        }
+        
+        function playResetSound() {
+            // 在这里添加实际的音效播放代码
+            console.log("播放重置音效");
+        }
     </script>
-
 </body>
 </html>
